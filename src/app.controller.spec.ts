@@ -10,15 +10,16 @@ describe('AppController', () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
       providers: [AppService, PrismaService],
-    }).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(vPrisma.client)
+      .compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('root', async () => {
     it('should return "Hello World!"', async () => {
-
-
       expect(await appController.getHello()).toBe('Hello World!');
     });
   });

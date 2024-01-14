@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { AppModule } from './app.module';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { PrismaService } from './prisma.service';
 
 describe('AppController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -10,7 +9,10 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(vPrisma.client)
+      .compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
 
